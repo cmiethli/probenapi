@@ -12,11 +12,7 @@ import de.proben.model.Probe;
 public class ProbenVerwaltenInMem implements ProbenVerwalten {
 	private List<Probe> proben;
 
-	public ProbenVerwaltenInMem(List<Probe> proben) {
-		this.proben = proben;
-	}
-
-	public ProbenVerwaltenInMem() {
+	ProbenVerwaltenInMem() {
 		this.proben = new ArrayList<Probe>();
 	}
 
