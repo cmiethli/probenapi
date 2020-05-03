@@ -1,5 +1,5 @@
 
-package probenapi.de.proben.dbtest;
+package de.proben.db;
 
 import java.io.FileInputStream;
 import java.io.IOException;

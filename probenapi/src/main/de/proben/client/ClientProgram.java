@@ -1,4 +1,4 @@
-package probenapi.de.proben.model;
+package de.proben.client;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -6,12 +6,13 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import probenapi.de.proben.api.ProbenVerwalten;
+import de.proben.api.ProbenVerwalten;
+import de.proben.model.Probe;
+import de.proben.util.Constants;
 
 public class ClientProgram {
 
 	public static void main(String[] args) {
-//		ProbenVerwalten inMem = new ProbenVerwaltenInMem(Proben.getProben());
 		ProbenVerwalten inMem = ProbenVerwalten
 				.getInstance(ProbenVerwalten.Inst.IN_MEM);
 
@@ -24,27 +25,27 @@ public class ClientProgram {
 	}
 
 	private static void testProbenVerwalten(ProbenVerwalten proVerwInstance) {
-		System.out.println("#####################################################");
-		System.out.println("##### Test fuer: " + proVerwInstance.getClass()
-				.getSimpleName() + " ##########");
-
-		for (int i = 0; i < 10; i++) {
+		String name = proVerwInstance.getClass()
+				.getSimpleName();
+		for (int i = 0; i < 11; i++) {
 			proVerwInstance.addProbe(generateRandomProbe());
 		}
-		proVerwInstance.addProbe(LocalDateTime.now(), 88);
 
+		System.out.println("#####################################################");
+		System.out.println("##### " + name + ": getAll() ##########");
 		proVerwInstance.getAll()
 				.forEach(System.out::println);
 
 		System.out.println();
-		System.out
-				.println("############### timeSorted(AeltesteZuerst) #############");
+		System.out.println(
+				"##### " + name + ": timeSorted(AeltesteZuerst) #############");
 		boolean isAeltesteZuerst = true;
 		proVerwInstance.timeSorted(isAeltesteZuerst)
 				.forEach(System.out::println);
 
 		System.out.println();
-		System.out.println("############### filtered(Ergebnis.xxx) #############");
+		System.out
+				.println("#### " + name + ": filtered(Ergebnis.xxx) #############");
 		proVerwInstance.filtered(Probe.Ergebnis.FRAGLICH)
 				.forEach(System.out::println);
 		proVerwInstance.filtered(Probe.Ergebnis.POS)
@@ -53,17 +54,25 @@ public class ClientProgram {
 				.forEach(System.out::println);
 
 		System.out.println();
-		System.out.println("############### removeProbe(id) #############");
+		System.out.println("##### " + name + ": removeProbe(id) #############");
 		System.out.println("remove id=0:" + proVerwInstance.removeProbe(0));
-		System.out.println("remove id=2:" + proVerwInstance.removeProbe(2));
+		proVerwInstance.getAll()
+				.stream()
+				.findAny()
+				.ifPresentOrElse(p -> {
+					long id = p.getId();
+					System.out.printf("remove id=%d:%s%n", id,
+							proVerwInstance.removeProbe(id));
+				}, () -> System.out.println("nothing to remove"));
+		;
+
 		proVerwInstance.getAll()
 				.forEach(System.out::println);
 		System.out.println();
 		System.out.println();
 	}
 
-	// addProbe() in JUnit >> 3 FRAGLICH, TODO
-	public static Probe generateRandomProbe() {
+	private static Probe generateRandomProbe() {
 		LocalTime t = LocalTime.MIN;
 		int thisYear = LocalDate.now()
 				.getYear();
@@ -71,7 +80,7 @@ public class ClientProgram {
 				.nextInt(365))
 				.withYear(thisYear);
 		return new Probe(LocalDateTime.of(d, t), ThreadLocalRandom.current()
-				.nextInt(10_001));
+				.nextInt(Constants.MW_UPPER_BOUND + 1));
 	}
 
 	private static void alleProbenAusDbLoeschen(ProbenVerwalten db) {

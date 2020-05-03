@@ -14,9 +14,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import de.proben.Constants;
 import de.proben.model.Probe;
 import de.proben.model.Probe.Ergebnis;
+import de.proben.util.Constants;
 
 class ProbenVerwaltenDbTest {
 

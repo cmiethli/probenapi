@@ -1,4 +1,4 @@
-package de.proben;
+package de.proben.util;
 
 public final class Constants {
 	private Constants() {

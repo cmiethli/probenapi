@@ -12,7 +12,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import de.proben.dbtest.MyDataSourceFactory;
+import de.proben.db.MyDataSourceFactory;
 import de.proben.model.Probe;
 import de.proben.model.Probe.Ergebnis;
 
