@@ -51,17 +51,13 @@ public class ProbenVerwaltenDb implements ProbenVerwalten {
 				.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(sqlInsert)) {
 
-			try {
-				pstmt.setLong(1, p.getId());
-				pstmt.setTimestamp(2, Timestamp.valueOf(p.getTime()));
-				pstmt.setInt(3, p.getMw());
-				pstmt.setString(4, p.getErg()
-						.toString());
-				pstmt.execute();
+			pstmt.setLong(1, p.getId());
+			pstmt.setTimestamp(2, Timestamp.valueOf(p.getTime()));
+			pstmt.setInt(3, p.getMw());
+			pstmt.setString(4, p.getErg()
+					.toString());
+			pstmt.execute();
 
-			} catch (RuntimeException e) {
-				System.out.println(e);
-			}
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -83,7 +79,7 @@ public class ProbenVerwaltenDb implements ProbenVerwalten {
 			pstmt.setLong(1, id);
 			updatedRows = pstmt.executeUpdate();
 		} catch (SQLException e) {
-			System.out.println(e);
+			throw new RuntimeException(e);
 		}
 		return updatedRows != 0 ? true : false;
 	}
@@ -96,7 +92,7 @@ public class ProbenVerwaltenDb implements ProbenVerwalten {
 				Statement statement = conn.createStatement();
 				ResultSet rs = statement.executeQuery(sqlSelect);) {
 			while (rs.next()) {
-				proben.add(new Probe(rs.getInt(1), rs.getTimestamp(2)
+				proben.add(new Probe(rs.getLong(1), rs.getTimestamp(2)
 						.toLocalDateTime(), rs.getInt(3),
 						Ergebnis.valueOf(rs.getString(4))));
 			}
