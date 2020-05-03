@@ -102,6 +102,8 @@ class ProbenVerwaltenInMemTest {
 	void removeProbeRichtig() {
 		assertTrue(inMem.removeProbe(1)); // p1
 		assertFalse(inMem.removeProbe(1)); // p1 schon entfernt
+		assertFalse(inMem.getAll()
+				.contains(p1));
 	}
 
 	@Test
@@ -134,8 +136,11 @@ class ProbenVerwaltenInMemTest {
 //	#######################################
 //	######### Helper Meths #################
 	private void removeAllProben() {
-		inMem.getAll()
-				.removeAll(inMem.getAll());
-//		System.out.println("empty: " + inMem.getAll());
+//		List<Probe> list = new ArrayList<Probe>(inMem.getAll());
+// List<Probe> proben in ProVerwInMem MUSS concurrent sein!
+		List<Probe> list = inMem.getAll();
+		list.stream()
+				.mapToLong(p -> p.getId())
+				.forEach(inMem::removeProbe);
 	}
 }

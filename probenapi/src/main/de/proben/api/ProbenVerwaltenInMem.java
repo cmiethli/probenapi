@@ -1,9 +1,9 @@
 package de.proben.api;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -13,7 +13,8 @@ public class ProbenVerwaltenInMem implements ProbenVerwalten {
 	private List<Probe> proben;
 
 	ProbenVerwaltenInMem() {
-		this.proben = new ArrayList<Probe>();
+//Concurrent weil: siehe ProVerwInMemTEST.java >> removeAllProben()
+		this.proben = new CopyOnWriteArrayList<Probe>();
 	}
 
 	@Override
