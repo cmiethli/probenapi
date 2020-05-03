@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import de.proben.Constants;
 import de.proben.api.ProbenVerwalten;
 
 public class ClientProgram {
@@ -71,7 +72,7 @@ public class ClientProgram {
 				.nextInt(365))
 				.withYear(thisYear);
 		return new Probe(LocalDateTime.of(d, t), ThreadLocalRandom.current()
-				.nextInt(10_001));
+				.nextInt(Constants.MW_UPPER_BOUND + 1));
 	}
 
 	private static void alleProbenAusDbLoeschen(ProbenVerwalten db) {

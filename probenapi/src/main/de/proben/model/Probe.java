@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+import de.proben.Constants;
+
 public class Probe {
 
 	private static long idCounter = 1;
@@ -22,7 +24,7 @@ public class Probe {
 	}
 
 	public Probe(LocalDateTime time, int mw) {
-		if (mw < 0 || mw > 10_000) {
+		if (mw < Constants.MW_LOWER_BOUND || mw > Constants.MW_UPPER_BOUND) {
 			throw new IllegalArgumentException("invalid messwert:" + mw);
 		}
 		id = idCounter++;
@@ -44,9 +46,10 @@ public class Probe {
 	}
 
 	private void berechneErgebnis() {
-		if (mw > 6000) {
+		if (mw > Constants.MW_UPPER_BOUND_FRAGLICH) {
 			erg = Ergebnis.POS;
-		} else if (mw >= 4000 && mw <= 6000) {
+		} else if (mw >= Constants.MW_LOWER_BOUND_FRAGLICH
+				&& mw <= Constants.MW_UPPER_BOUND_FRAGLICH) {
 			erg = Ergebnis.FRAGLICH;
 		} else {
 			erg = Ergebnis.NEG;
