@@ -17,8 +17,8 @@ import de.proben.model.Probe;
 import de.proben.model.Probe.Ergebnis;
 
 /**
- * Implementierung von {@linkplain ProbenVerwalten}. Die Speicherung der Proben
- * laeuft ueber eine Datenbank in MySQL.
+ * Database Implementierung von {@linkplain ProbenVerwalten}. Die Speicherung
+ * der Proben laeuft ueber eine Datenbank in MySQL.
  * 
  * @author cmiethli
  *

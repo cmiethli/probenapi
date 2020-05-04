@@ -10,7 +10,8 @@ import java.util.stream.Stream;
 import de.proben.model.Probe;
 
 /**
- * Implementierung von {@linkplain ProbenVerwalten}. Die Speicherung der Proben
+ * InMemory Implementierung von {@linkplain ProbenVerwalten}. Die Speicherung
+ * der Proben
  * laeuft InMemory ueber eine java.util.list
  * 
  * @author cmiethli

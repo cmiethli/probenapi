@@ -68,8 +68,8 @@ public interface ProbenVerwalten {
 	 * Gibt eine Instanz vom Typ ProbenVerwalten zurueck.
 	 * 
 	 * @param instance enum ProbeVerwaltenInstance: IN_MEM, DB
-	 * @return IN_MEM gibt Instanz von ProbenVerwaltenInMem zurueck, DB gibt
-	 *         Instanz von ProbenVerwaltenDb zurueck
+	 * @return IN_MEM gibt eine Instanz von ProbenVerwaltenInMem zurueck,<br>
+	 *         DB gibt eine Instanz von ProbenVerwaltenDb zurueck
 	 */
 	static ProbenVerwalten getInstance(ProbeVerwaltenInstance instance) {
 		ProbenVerwalten inst;
