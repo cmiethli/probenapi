@@ -36,7 +36,8 @@ class ProbenVerwaltenDbTest {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		db = ProbenVerwalten.getInstance(ProbenVerwalten.ProbeVerwaltenInstance.DB);
+		db = ProbenVerwaltenFactory
+				.getInstance(ProbenVerwaltenFactory.Instance.DB);
 	}
 
 	@BeforeEach

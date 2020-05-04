@@ -36,7 +36,8 @@ class ProbenVerwaltenInMemTest {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		inMem = ProbenVerwalten.getInstance(ProbenVerwalten.ProbeVerwaltenInstance.IN_MEM);
+		inMem = ProbenVerwaltenFactory
+				.getInstance(ProbenVerwaltenFactory.Instance.IN_MEM);
 	}
 
 	@BeforeEach

@@ -7,18 +7,19 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import de.proben.api.ProbenVerwalten;
+import de.proben.api.ProbenVerwaltenFactory;
 import de.proben.model.Probe;
 import de.proben.util.Constants;
 
 public class ClientProgram {
 
 	public static void main(String[] args) {
-		ProbenVerwalten inMem = ProbenVerwalten
-				.getInstance(ProbenVerwalten.ProbeVerwaltenInstance.IN_MEM);
-
+		ProbenVerwalten inMem = ProbenVerwaltenFactory
+				.getInstance(ProbenVerwaltenFactory.Instance.IN_MEM);
 		testProbenVerwalten(inMem);
 
-		ProbenVerwalten db = ProbenVerwalten.getInstance(ProbenVerwalten.ProbeVerwaltenInstance.DB);
+		ProbenVerwalten db = ProbenVerwaltenFactory
+				.getInstance(ProbenVerwaltenFactory.Instance.DB);
 		alleProbenAusDbLoeschen(db);
 		testProbenVerwalten(db);
 

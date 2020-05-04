@@ -64,46 +64,4 @@ public interface ProbenVerwalten {
 	 */
 	boolean removeProbe(long id);
 
-	/**
-	 * Gibt eine Instanz vom Typ ProbenVerwalten zurueck.
-	 * 
-	 * @param instance enum ProbeVerwaltenInstance: IN_MEM, DB
-	 * @return IN_MEM gibt eine Instanz von ProbenVerwaltenInMem zurueck,<br>
-	 *         DB gibt eine Instanz von ProbenVerwaltenDb zurueck
-	 */
-	static ProbenVerwalten getInstance(ProbeVerwaltenInstance instance) {
-		ProbenVerwalten inst;
-		switch (instance) {
-		case IN_MEM:
-			inst = new ProbenVerwaltenInMem();
-			break;
-		case DB:
-			inst = new ProbenVerwaltenDb();
-			break;
-		default:
-			throw new AssertionError("invalid instance...");
-//		case IN_MEM -> instance = new ProbenVerwaltenInMem();
-//		case DB -> instance = null;
-//		default -> throw new AssertionError();
-		}
-		return inst;
-	}
-
-	/**
-	 * Hilfsenum fuer {@link ProbenVerwalten#getInstance(ProbeVerwaltenInstance)
-	 * getInstance(Instance)}. Sie bestimmt die zurueck gegebene Instanz.
-	 * 
-	 * @author cmiethli
-	 *
-	 */
-	static enum ProbeVerwaltenInstance {
-		/**
-		 * Gibt Instanz vom Typ ProbenVerwaltenInMem zurueck
-		 */
-		IN_MEM,
-		/**
-		 * Gibt Instanz vom Typ ProbenVerwaltenDb zurueck
-		 */
-		DB
-	}
 }
