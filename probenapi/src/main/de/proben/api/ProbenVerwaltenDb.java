@@ -25,7 +25,11 @@ import de.proben.model.Probe.Ergebnis;
  */
 public class ProbenVerwaltenDb implements ProbenVerwalten {
 
-	DataSource ds = MyDataSourceFactory.getMySQLDataSource();
+	DataSource ds;
+
+	ProbenVerwaltenDb() {
+		ds = MyDataSourceFactory.getMySQLDataSource();
+	}
 
 	@Override
 	public List<Probe> getAll() {
