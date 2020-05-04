@@ -16,6 +16,13 @@ import de.proben.db.MyDataSourceFactory;
 import de.proben.model.Probe;
 import de.proben.model.Probe.Ergebnis;
 
+/**
+ * Implementierung von {@linkplain ProbenVerwalten}. Die Speicherung der Proben
+ * laeuft ueber eine Datenbank in MySQL.
+ * 
+ * @author cmiethli
+ *
+ */
 public class ProbenVerwaltenDb implements ProbenVerwalten {
 
 	DataSource ds = MyDataSourceFactory.getMySQLDataSource();
