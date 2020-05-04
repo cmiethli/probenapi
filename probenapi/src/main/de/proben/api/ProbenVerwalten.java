@@ -6,8 +6,8 @@ import java.util.List;
 import de.proben.model.Probe;
 
 /**
- * Verwaltet Proben
- * Es gibt zwei Implementierungen fuer die Speicherung der Proben: <br>
+ * API zur Verwaltung von Proben. Es gibt zwei Implementierungen fuer die
+ * Speicherung der Proben: <br>
  * 1) InMemory oder <br>
  * 2) in einer MySQL Database
  * 
@@ -90,9 +90,8 @@ public interface ProbenVerwalten {
 	}
 
 	/**
-	 * Hilfsenum fuer getInstance(). Sie bestimmt die zurueck gegebene
-	 * Instanz.
-	 * 
+	 * Hilfsenum fuer {@link ProbenVerwalten#getInstance(ProbeVerwaltenInstance)
+	 * getInstance(Instance)}. Sie bestimmt die zurueck gegebene Instanz.
 	 * 
 	 * @author cmiethli
 	 *
