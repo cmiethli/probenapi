@@ -14,11 +14,11 @@ public class ClientProgram {
 
 	public static void main(String[] args) {
 		ProbenVerwalten inMem = ProbenVerwalten
-				.getInstance(ProbenVerwalten.Inst.IN_MEM);
+				.getInstance(ProbenVerwalten.ProbeVerwaltenInstance.IN_MEM);
 
 		testProbenVerwalten(inMem);
 
-		ProbenVerwalten db = ProbenVerwalten.getInstance(ProbenVerwalten.Inst.DB);
+		ProbenVerwalten db = ProbenVerwalten.getInstance(ProbenVerwalten.ProbeVerwaltenInstance.DB);
 		alleProbenAusDbLoeschen(db);
 		testProbenVerwalten(db);
 
@@ -48,9 +48,9 @@ public class ClientProgram {
 				.println("#### " + name + ": filtered(Ergebnis.xxx) #############");
 		proVerwInstance.filtered(Probe.Ergebnis.FRAGLICH)
 				.forEach(System.out::println);
-		proVerwInstance.filtered(Probe.Ergebnis.POS)
+		proVerwInstance.filtered(Probe.Ergebnis.POSITIV)
 				.forEach(System.out::println);
-		proVerwInstance.filtered(Probe.Ergebnis.NEG)
+		proVerwInstance.filtered(Probe.Ergebnis.NEGATIV)
 				.forEach(System.out::println);
 
 		System.out.println();

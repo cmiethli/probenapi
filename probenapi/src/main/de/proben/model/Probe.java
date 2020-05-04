@@ -47,12 +47,12 @@ public class Probe {
 
 	private void berechneErgebnis() {
 		if (messwert > Constants.MW_UPPER_BOUND_FRAGLICH) {
-			ergebnis = Ergebnis.POS;
+			ergebnis = Ergebnis.POSITIV;
 		} else if (messwert >= Constants.MW_LOWER_BOUND_FRAGLICH
 				&& messwert <= Constants.MW_UPPER_BOUND_FRAGLICH) {
 			ergebnis = Ergebnis.FRAGLICH;
 		} else {
-			ergebnis = Ergebnis.NEG;
+			ergebnis = Ergebnis.NEGATIV;
 		}
 //		double mean = Stream.of(1, 2, 3, 4, 5, 6)
 //			.collect(Collectors.teeing(Collectors.summingDouble(i -> i),
@@ -100,7 +100,7 @@ public class Probe {
 	}
 
 	public static enum Ergebnis {
-		POS, NEG, FRAGLICH
+		POSITIV, NEGATIV, FRAGLICH
 	}
 
 }

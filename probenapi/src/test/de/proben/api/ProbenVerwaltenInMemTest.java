@@ -36,7 +36,7 @@ class ProbenVerwaltenInMemTest {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		inMem = ProbenVerwalten.getInstance(ProbenVerwalten.Inst.IN_MEM);
+		inMem = ProbenVerwalten.getInstance(ProbenVerwalten.ProbeVerwaltenInstance.IN_MEM);
 	}
 
 	@BeforeEach
@@ -62,7 +62,7 @@ class ProbenVerwaltenInMemTest {
 		List<Probe> proben = inMem.getAll();
 		assertTrue(proben.isEmpty());
 
-		proben = inMem.filtered(Ergebnis.POS);
+		proben = inMem.filtered(Ergebnis.POSITIV);
 		assertTrue(proben.isEmpty());
 
 		proben = inMem.timeSorted(true);
@@ -88,13 +88,13 @@ class ProbenVerwaltenInMemTest {
 	@Test
 	void filteredRichtig() {
 //	p1=mwNeg, p2=mwFraglich, p3=mwPos
-		List<Probe> proben = inMem.filtered(Ergebnis.NEG);
+		List<Probe> proben = inMem.filtered(Ergebnis.NEGATIV);
 		assertEquals(p1, proben.get(0));
 
 		proben = inMem.filtered(Ergebnis.FRAGLICH);
 		assertEquals(p2, proben.get(0));
 
-		proben = inMem.filtered(Ergebnis.POS);
+		proben = inMem.filtered(Ergebnis.POSITIV);
 		assertEquals(p3, proben.get(0));
 	}
 

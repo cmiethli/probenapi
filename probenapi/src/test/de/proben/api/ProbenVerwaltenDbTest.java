@@ -36,7 +36,7 @@ class ProbenVerwaltenDbTest {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		db = ProbenVerwalten.getInstance(ProbenVerwalten.Inst.DB);
+		db = ProbenVerwalten.getInstance(ProbenVerwalten.ProbeVerwaltenInstance.DB);
 	}
 
 	@BeforeEach
@@ -62,7 +62,7 @@ class ProbenVerwaltenDbTest {
 		List<Probe> proben = db.getAll();
 		assertTrue(proben.isEmpty());
 
-		proben = db.filtered(Ergebnis.POS);
+		proben = db.filtered(Ergebnis.POSITIV);
 		assertTrue(proben.isEmpty());
 
 		proben = db.timeSorted(true);
@@ -88,13 +88,13 @@ class ProbenVerwaltenDbTest {
 	@Test
 	void filteredRichtig() {
 //	p1=mwNeg, p2=mwFraglich, p3=mwPos
-		List<Probe> proben = db.filtered(Ergebnis.NEG);
+		List<Probe> proben = db.filtered(Ergebnis.NEGATIV);
 		assertEquals(p1, proben.get(0));
 
 		proben = db.filtered(Ergebnis.FRAGLICH);
 		assertEquals(p2, proben.get(0));
 
-		proben = db.filtered(Ergebnis.POS);
+		proben = db.filtered(Ergebnis.POSITIV);
 		assertEquals(p3, proben.get(0));
 	}
 
