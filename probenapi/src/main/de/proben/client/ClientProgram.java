@@ -12,26 +12,25 @@ import de.proben.model.Probe;
 import de.proben.util.Constants;
 
 public class ClientProgram {
+	private static Probe probeOhneMw;
 
 	public static void main(String[] args) {
 		ProbenVerwalten inMem = ProbenVerwaltenFactory
 				.getInstance(ProbenVerwaltenFactory.Instance.IN_MEM);
 		testProbenVerwalten(inMem);
 
-		ProbenVerwalten db = ProbenVerwaltenFactory
-				.getInstance(ProbenVerwaltenFactory.Instance.DB);
-		alleProbenAusDbLoeschen(db);
-		testProbenVerwalten(db);
+//		ProbenVerwalten db = ProbenVerwaltenFactory
+//				.getInstance(ProbenVerwaltenFactory.Instance.DB);
+//		alleProbenAusDbLoeschen(db);
+//		testProbenVerwalten(db);
 
 	}
 
 	private static void testProbenVerwalten(ProbenVerwalten proVerwInstance) {
+		generateProben(proVerwInstance);
+
 		String name = proVerwInstance.getClass()
 				.getSimpleName();
-		for (int i = 0; i < 11; i++) {
-			proVerwInstance.addProbe(generateRandomProbe());
-		}
-
 		System.out.println("#####################################################");
 		System.out.println("##### " + name + ": getAll() ##########");
 		proVerwInstance.getAll()
@@ -56,21 +55,42 @@ public class ClientProgram {
 
 		System.out.println();
 		System.out.println("##### " + name + ": removeProbe(id) #############");
-		System.out.println("remove id=0:" + proVerwInstance.removeProbe(0));
+		System.out.println("remove id=0: " + proVerwInstance.removeProbe(0));
 		proVerwInstance.getAll()
 				.stream()
 				.findAny()
 				.ifPresentOrElse(p -> {
 					long id = p.getId();
-					System.out.printf("remove id=%d:%s%n", id,
+					System.out.printf("remove id=%d: %s%n", id,
 							proVerwInstance.removeProbe(id));
 				}, () -> System.out.println("nothing to remove"));
-		;
+		proVerwInstance.getAll()
+				.forEach(System.out::println);
+
+		System.out.println();
+		int mw = 88;
+		System.out
+				.println("##### " + name + ": addMesswert(" + mw + ") #############");
+		System.out.println("ProbeId=" + probeOhneMw.getId() + ": "
+				+ proVerwInstance.addMesswert(probeOhneMw.getId(), mw));
+
+		Probe keineMwAenderung = proVerwInstance.getAll()
+				.get(0);
+		System.out.println("ProbeId=" + keineMwAenderung.getId() + ": "
+				+ proVerwInstance.addMesswert(keineMwAenderung.getId(), mw));
 
 		proVerwInstance.getAll()
 				.forEach(System.out::println);
-		System.out.println();
-		System.out.println();
+
+	}
+
+//	############### Helper Meths ####################
+	private static void generateProben(ProbenVerwalten proVerwInstance) {
+		for (int i = 0; i < 10; i++) {
+			proVerwInstance.addProbe(generateRandomProbe());
+		}
+		probeOhneMw = new Probe(LocalDateTime.now());
+		proVerwInstance.addProbe(probeOhneMw);
 	}
 
 	private static Probe generateRandomProbe() {

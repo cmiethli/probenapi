@@ -112,4 +112,9 @@ public class ProbenVerwaltenDb implements ProbenVerwalten {
 		}
 		return proben;
 	}
+
+	@Override
+	public boolean addMesswert(long probeId, Integer messwert) {
+		return false;
+	}
 }

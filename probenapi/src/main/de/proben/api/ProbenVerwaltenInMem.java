@@ -60,6 +60,25 @@ public class ProbenVerwaltenInMem implements ProbenVerwalten {
 				: false;
 	}
 
+	@Override
+	public boolean addMesswert(long probeId, Integer messwert) {
+		Optional<Probe> pr = getProbe(probeId);
+		boolean isMesswertSet;
+		if (pr.isPresent()) {
+			if (pr.get()
+					.getMw() == null) {
+				pr.get()
+						.setMesswert(messwert);
+				isMesswertSet = true;
+			} else { // Messwert schon vorhanden
+				isMesswertSet = false;
+			}
+		} else {
+			isMesswertSet = false;
+		}
+		return isMesswertSet;
+	}
+
 // ############# Helper Meths ####################
 	private Optional<Probe> getProbe(long id) {
 		return proben.parallelStream()
@@ -81,5 +100,4 @@ public class ProbenVerwaltenInMem implements ProbenVerwalten {
 		}
 		return probenSorted.collect(Collectors.toList());
 	}
-
 }
