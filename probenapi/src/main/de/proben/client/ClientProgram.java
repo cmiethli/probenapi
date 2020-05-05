@@ -19,10 +19,13 @@ public class ClientProgram {
 				.getInstance(ProbenVerwaltenFactory.Instance.IN_MEM);
 		testProbenVerwalten(inMem);
 
-//		ProbenVerwalten db = ProbenVerwaltenFactory
-//				.getInstance(ProbenVerwaltenFactory.Instance.DB);
-//		alleProbenAusDbLoeschen(db);
-//		testProbenVerwalten(db);
+		System.out.println();
+		System.out.println("###############################################");
+		System.out.println("###############################################");
+		ProbenVerwalten db = ProbenVerwaltenFactory
+				.getInstance(ProbenVerwaltenFactory.Instance.DB);
+		alleProbenAusDbLoeschen(db);
+		testProbenVerwalten(db);
 
 	}
 
@@ -31,7 +34,6 @@ public class ClientProgram {
 
 		String name = proVerwInstance.getClass()
 				.getSimpleName();
-		System.out.println("#####################################################");
 		System.out.println("##### " + name + ": getAll() ##########");
 		proVerwInstance.getAll()
 				.forEach(System.out::println);
@@ -69,6 +71,7 @@ public class ClientProgram {
 
 		System.out.println();
 		int mw = 88;
+//		int mw = -88; // IllegalArgExc
 		System.out
 				.println("##### " + name + ": addMesswert(" + mw + ") #############");
 		System.out.println("ProbeId=" + probeOhneMw.getId() + ": "
@@ -84,7 +87,7 @@ public class ClientProgram {
 
 	}
 
-//	############### Helper Meths ####################
+//	###################### Helper Meths #################################
 	private static void generateProben(ProbenVerwalten proVerwInstance) {
 		for (int i = 0; i < 10; i++) {
 			proVerwInstance.addProbe(generateRandomProbe());
