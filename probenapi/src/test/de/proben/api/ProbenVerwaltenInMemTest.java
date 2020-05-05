@@ -34,6 +34,8 @@ class ProbenVerwaltenInMemTest {
 	private static Probe p2 = new Probe(ldt, mwFrag);
 	private static Probe p3 = new Probe(ldt.plusDays(2), mwPos);
 
+	private static Probe p4 = new Probe(ldt.plusDays(7)); // ohne Messwert
+
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		inMem = ProbenVerwaltenFactory
@@ -46,6 +48,7 @@ class ProbenVerwaltenInMemTest {
 		inMem.addProbe(p1);
 		inMem.addProbe(p2);
 		inMem.addProbe(p3);
+		inMem.addProbe(p4);
 	}
 
 	@Test
@@ -54,7 +57,8 @@ class ProbenVerwaltenInMemTest {
 		assertTrue(proben.contains(p1));
 		assertTrue(proben.contains(p2));
 		assertTrue(proben.contains(p3));
-		assertEquals(3, proben.size());
+		assertTrue(proben.contains(p4));
+		assertEquals(4, proben.size());
 	}
 
 	@Test
@@ -74,16 +78,18 @@ class ProbenVerwaltenInMemTest {
 	void timeSortedRichtig() {
 		boolean isAeltesteZuerst = true;
 		List<Probe> proben = inMem.timeSorted(isAeltesteZuerst);
-//	p1=ldt.plusDays(1), p2=ldt, p3=ldt.plusDays(2)
+//	p1=ldt.plusDays(1), p2=ldt, p3=ldt.plusDays(2), p4=ldt.plusDays(7)
 		assertEquals(p2, proben.get(0));
 		assertEquals(p1, proben.get(1));
 		assertEquals(p3, proben.get(2));
+		assertEquals(p4, proben.get(3));
 
 		isAeltesteZuerst = false;
 		proben = inMem.timeSorted(isAeltesteZuerst);
-		assertEquals(p3, proben.get(0));
-		assertEquals(p1, proben.get(1));
-		assertEquals(p2, proben.get(2));
+		assertEquals(p4, proben.get(0));
+		assertEquals(p3, proben.get(1));
+		assertEquals(p1, proben.get(2));
+		assertEquals(p2, proben.get(3));
 	}
 
 	@Test
@@ -112,6 +118,10 @@ class ProbenVerwaltenInMemTest {
 //	aus setUp()
 		assertTrue(inMem.getAll()
 				.contains(p1));
+
+//	Probe p4 ohne Messwert
+		assertTrue(inMem.getAll()
+				.contains(p4));
 	}
 
 	@Test
@@ -124,6 +134,45 @@ class ProbenVerwaltenInMemTest {
 		assertTrue(mwPos == inMem.getAll()
 				.get(0)
 				.getMw());
+	}
+
+	@Test
+	void addProbe_NurLocalDateTimeRichtig() {
+		removeAllProben();
+		inMem.addProbe(ldt);
+		assertTrue(ldt.equals(inMem.getAll()
+				.get(0)
+				.getTime()));
+		assertTrue(null == inMem.getAll()
+				.get(0)
+				.getMw());
+		assertTrue(null == inMem.getAll()
+				.get(0)
+				.getErg());
+	}
+
+	@Test
+	void addMesswertRichtig() {
+		Integer newMesswert = mwFrag;
+		Ergebnis newErgebnis = Ergebnis.FRAGLICH;
+
+//	Messwert noch nicht vorhanden
+		assertTrue(inMem.addMesswert(4, newMesswert));
+		assertEquals(newMesswert, inMem.getAll()
+				.get(3)
+				.getMw());
+		assertEquals(newErgebnis, inMem.getAll()
+				.get(3)
+				.getErg());
+
+//	Probe nicht vorhanden
+		assertFalse(inMem.addMesswert(0, newMesswert));
+//	Messwert schon vorhanden
+		assertFalse(inMem.addMesswert(1, newMesswert));
+//p1 hat mwNeg
+		assertFalse(newMesswert.equals(inMem.getAll()
+				.get(0)
+				.getMw()));
 	}
 
 	@Test

@@ -48,8 +48,13 @@ public class ProbenVerwaltenInMem implements ProbenVerwalten {
 	}
 
 	@Override
-	public void addProbe(LocalDateTime zeit, int messwert) {
-		proben.add(new Probe(zeit, messwert));
+	public void addProbe(LocalDateTime zeitpunkt, int messwert) {
+		proben.add(new Probe(zeitpunkt, messwert));
+	}
+
+	@Override
+	public void addProbe(LocalDateTime zeitpunkt) {
+		proben.add(new Probe(zeitpunkt));
 	}
 
 	@Override
@@ -58,6 +63,25 @@ public class ProbenVerwaltenInMem implements ProbenVerwalten {
 
 		return probeToRemove.isPresent() ? proben.remove(probeToRemove.get())
 				: false;
+	}
+
+	@Override
+	public boolean addMesswert(long probeId, Integer messwert) {
+		Optional<Probe> pr = getProbe(probeId);
+		boolean isMesswertSet = false;
+		if (pr.isPresent()) {
+			if (pr.get()
+					.getMw() == null) {
+// Messwert noch nicht vorhanden
+				pr.get()
+						.setMesswert(messwert);
+				isMesswertSet = true;
+			} else {
+// Messwert schon vorhanden
+				isMesswertSet = false;
+			}
+		}
+		return isMesswertSet;
 	}
 
 // ############# Helper Meths ####################
@@ -81,5 +105,4 @@ public class ProbenVerwaltenInMem implements ProbenVerwalten {
 		}
 		return probenSorted.collect(Collectors.toList());
 	}
-
 }

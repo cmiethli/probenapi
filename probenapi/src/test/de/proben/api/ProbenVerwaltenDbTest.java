@@ -34,10 +34,11 @@ class ProbenVerwaltenDbTest {
 	private static Probe p2 = new Probe(ldt, mwFrag);
 	private static Probe p3 = new Probe(ldt.plusDays(2), mwPos);
 
+	private static Probe p4 = new Probe(ldt.plusDays(7)); // ohne Messwert
+
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		db = ProbenVerwaltenFactory
-				.getInstance(ProbenVerwaltenFactory.Instance.DB);
+		db = ProbenVerwaltenFactory.getInstance(ProbenVerwaltenFactory.Instance.DB);
 	}
 
 	@BeforeEach
@@ -46,6 +47,7 @@ class ProbenVerwaltenDbTest {
 		db.addProbe(p1);
 		db.addProbe(p2);
 		db.addProbe(p3);
+		db.addProbe(p4);
 	}
 
 	@Test
@@ -54,7 +56,8 @@ class ProbenVerwaltenDbTest {
 		assertTrue(proben.contains(p1));
 		assertTrue(proben.contains(p2));
 		assertTrue(proben.contains(p3));
-		assertEquals(3, proben.size());
+		assertTrue(proben.contains(p4));
+		assertEquals(4, proben.size());
 	}
 
 	@Test
@@ -74,16 +77,18 @@ class ProbenVerwaltenDbTest {
 	void timeSortedRichtig() {
 		boolean isAeltesteZuerst = true;
 		List<Probe> proben = db.timeSorted(isAeltesteZuerst);
-//	p1=ldt.plusDays(1), p2=ldt, p3=ldt.plusDays(2)
+//	p1=ldt.plusDays(1), p2=ldt, p3=ldt.plusDays(2), p4=ldt.plusDays(7)
 		assertEquals(p2, proben.get(0));
 		assertEquals(p1, proben.get(1));
 		assertEquals(p3, proben.get(2));
+		assertEquals(p4, proben.get(3));
 
 		isAeltesteZuerst = false;
 		proben = db.timeSorted(isAeltesteZuerst);
-		assertEquals(p3, proben.get(0));
-		assertEquals(p1, proben.get(1));
-		assertEquals(p2, proben.get(2));
+		assertEquals(p4, proben.get(0));
+		assertEquals(p3, proben.get(1));
+		assertEquals(p1, proben.get(2));
+		assertEquals(p2, proben.get(3));
 	}
 
 	@Test
@@ -112,6 +117,10 @@ class ProbenVerwaltenDbTest {
 //	aus setUp()
 		assertTrue(db.getAll()
 				.contains(p1));
+
+//	Probe p4 ohne Messwert
+		assertTrue(db.getAll()
+				.contains(p4));
 	}
 
 	@Test
@@ -124,6 +133,45 @@ class ProbenVerwaltenDbTest {
 		assertTrue(mwPos == db.getAll()
 				.get(0)
 				.getMw());
+	}
+
+	@Test
+	void addProbe_NurLocalDateTimeRichtig() {
+		removeAllProben();
+		db.addProbe(ldt);
+		assertTrue(ldt.equals(db.getAll()
+				.get(0)
+				.getTime()));
+		assertTrue(null == db.getAll()
+				.get(0)
+				.getMw());
+		assertTrue(null == db.getAll()
+				.get(0)
+				.getErg());
+	}
+
+	@Test
+	void addMesswertRichtig() {
+		Integer newMesswert = mwFrag;
+		Ergebnis newErgebnis = Ergebnis.FRAGLICH;
+
+//	Messwert noch nicht vorhanden
+		assertTrue(db.addMesswert(4, newMesswert));
+		assertEquals(newMesswert, db.getAll()
+				.get(3)
+				.getMw());
+		assertEquals(newErgebnis, db.getAll()
+				.get(3)
+				.getErg());
+
+//	Probe nicht vorhanden
+		assertFalse(db.addMesswert(0, newMesswert));
+//	Messwert schon vorhanden
+		assertFalse(db.addMesswert(1, newMesswert));
+//p1 hat mwNeg
+		assertFalse(newMesswert.equals(db.getAll()
+				.get(0)
+				.getMw()));
 	}
 
 	@Test

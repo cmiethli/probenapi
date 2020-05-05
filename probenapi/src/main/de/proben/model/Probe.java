@@ -11,54 +11,58 @@ public class Probe {
 
 	private static long idCounter = 1;
 	private long probeId;
-	private LocalDateTime time;
-	private int messwert;
+	private LocalDateTime zeitpunkt;
+	private Integer messwert;
 	private Ergebnis ergebnis;
 
-	public Probe(long id, LocalDateTime time, int mw, Ergebnis erg) {
-		this.probeId = id;
-		idCounter = id;
-		this.time = time;
-		this.messwert = mw;
-		this.ergebnis = erg;
+	public Probe(LocalDateTime time) {
+		probeId = idCounter++;
+		this.zeitpunkt = time;
 	}
 
-	public Probe(LocalDateTime time, int mw) {
-		if (mw < Constants.MW_LOWER_BOUND || mw > Constants.MW_UPPER_BOUND) {
-			throw new IllegalArgumentException("invalid messwert:" + mw);
-		}
+	public Probe(LocalDateTime time, Integer messwert) {
+		testMesswert(messwert);
+
 		probeId = idCounter++;
-		this.time = time;
-		this.messwert = mw;
+		this.zeitpunkt = time;
+		this.messwert = messwert;
 		berechneErgebnis();
+	}
+
+	public Probe(long id, LocalDateTime time) {
+		this.probeId = id;
+		idCounter = id;
+		this.zeitpunkt = time;
+	}
+
+	public Probe(long id, LocalDateTime time, Integer mw, Ergebnis erg) {
+		this.probeId = id;
+		idCounter = id;
+		this.zeitpunkt = time;
+		this.messwert = mw;
+		this.ergebnis = erg;
 	}
 
 	@Override
 	public String toString() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-dd");
-		NumberFormat formatKilos = NumberFormat.getCompactNumberInstance(
-				new Locale("en", "US"), NumberFormat.Style.SHORT);
-		formatKilos.setMaximumFractionDigits(1);
-		return String.format("id=%3d, zeit=%8s, mw=%5s, erg=%s", probeId,
-				time.format(formatter), formatKilos.format(messwert), ergebnis);
-//		"id=" + id + ", zeit=" + time.truncatedTo(ChronoUnit.MINUTES)
-//			.toLocalDate() + ", mw=" + mw + ", erg=" + erg;
-	}
-
-	private void berechneErgebnis() {
-		if (messwert > Constants.MW_UPPER_BOUND_FRAGLICH) {
-			ergebnis = Ergebnis.POSITIV;
-		} else if (messwert >= Constants.MW_LOWER_BOUND_FRAGLICH
-				&& messwert <= Constants.MW_UPPER_BOUND_FRAGLICH) {
-			ergebnis = Ergebnis.FRAGLICH;
+//		Java12 Feature
+		String formatKilosStr;
+		if (messwert == null) {
+			formatKilosStr = null;
 		} else {
-			ergebnis = Ergebnis.NEGATIV;
+			NumberFormat formatKilos = NumberFormat.getCompactNumberInstance(
+					new Locale("en", "US"), NumberFormat.Style.SHORT);
+			formatKilos.setMaximumFractionDigits(1);
+			formatKilosStr = formatKilos.format(messwert);
 		}
-//		double mean = Stream.of(1, 2, 3, 4, 5, 6)
-//			.collect(Collectors.teeing(Collectors.summingDouble(i -> i),
-//				Collectors.counting(), (sum, n) -> sum / n));
-//
-//		System.out.println(mean);
+
+		return String.format("[id=%3d, zeit=%8s, messwert=%5s, ergebnis=%s",
+				probeId, zeitpunkt.format(formatter), formatKilosStr, ergebnis + "]");
+//		return "[id=" + probeId + ", zeit="
+//				+ zeitpunkt.truncatedTo(ChronoUnit.MINUTES)
+//						.toLocalDate()
+//				+ ", mw=" + messwert + ", erg=" + ergebnis + "]";
 	}
 
 	@Override
@@ -72,8 +76,8 @@ public class Probe {
 		if (!(object instanceof Probe)) {
 			return false;
 		}
-		Probe other = (Probe) object;
 
+		Probe other = (Probe) object;
 		if (this.getId() == other.getId()) {
 			return true;
 		} else {
@@ -88,10 +92,10 @@ public class Probe {
 	}
 
 	public LocalDateTime getTime() {
-		return time;
+		return zeitpunkt;
 	}
 
-	public int getMw() {
+	public Integer getMw() {
 		return messwert;
 	}
 
@@ -99,8 +103,35 @@ public class Probe {
 		return ergebnis;
 	}
 
+//	Setter
+	public void setMesswert(Integer messwert) {
+		testMesswert(messwert);
+		this.messwert = messwert;
+		berechneErgebnis();
+	}
+
+//	Enum
 	public static enum Ergebnis {
 		POSITIV, NEGATIV, FRAGLICH
+	}
+
+//	##################### Helper Meths ##################
+	private void berechneErgebnis() {
+		if (messwert > Constants.MW_UPPER_BOUND_FRAGLICH) {
+			ergebnis = Ergebnis.POSITIV;
+		} else if (messwert >= Constants.MW_LOWER_BOUND_FRAGLICH
+				&& messwert <= Constants.MW_UPPER_BOUND_FRAGLICH) {
+			ergebnis = Ergebnis.FRAGLICH;
+		} else {
+			ergebnis = Ergebnis.NEGATIV;
+		}
+	}
+
+	private void testMesswert(Integer messwert) {
+		if (messwert < Constants.MW_LOWER_BOUND
+				|| messwert > Constants.MW_UPPER_BOUND) {
+			throw new IllegalArgumentException("invalid messwert:" + messwert);
+		}
 	}
 
 }

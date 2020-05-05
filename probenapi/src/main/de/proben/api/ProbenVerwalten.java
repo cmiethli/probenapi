@@ -42,11 +42,20 @@ public interface ProbenVerwalten {
 	List<Probe> filtered(Probe.Ergebnis ergebnis);
 
 	/**
-	 * Fuegt eine Probe dem Speicher hinzu.
+	 * Fuegt eine Probe dem Speicher hinzu. Die Probe kann mit oder ohne messwert
+	 * sein.
 	 * 
 	 * @param probe Probe die hinzugefuegt wird
 	 */
 	void addProbe(Probe probe);
+
+	/**
+	 * Fuegt eine Probe dem Speicher hinzu. Die Probe ist dabei ohne messwert
+	 * (=null).
+	 * 
+	 * @param zeitpunkt Zeitpunkt der Probennahme
+	 */
+	void addProbe(LocalDateTime zeitpunkt);
 
 	/**
 	 * Fuegt eine Probe dem Speicher hinzu.
@@ -59,9 +68,21 @@ public interface ProbenVerwalten {
 	/**
 	 * Loescht die angegebene Probe aus dem Speicher.
 	 * 
-	 * @param id Eindeutige id der zu loeschenden Probe
+	 * @param probeId Eindeutige id der zu loeschenden Probe
 	 * @return true falls diese Probe im Speicher war
 	 */
-	boolean removeProbe(long id);
+	boolean removeProbe(long probeId);
+
+	/**
+	 * Fuegt der angegebenen Probe einen Messwert zu. Die Probe darf dabei noch
+	 * keinen Messwert haben (=null).
+	 * 
+	 * @param probeId  Eindeutige id der Probe
+	 * @param messwert messwert der hinzugefuegt werden soll
+	 * @return true falls die Probe noch keinen Messwert hatte<br>
+	 *         false falls die Proben schon einen Messwert hatte oder wenn die
+	 *         Probe nicht existiert
+	 */
+	boolean addMesswert(long probeId, Integer messwert);
 
 }
