@@ -74,7 +74,7 @@ public interface ProbenVerwalten {
 	boolean removeProbe(long probeId);
 
 	/**
-	 * Fuegt der angegebenen Probe einen Messwert zu. Die Proben darf dabei noch
+	 * Fuegt der angegebenen Probe einen Messwert zu. Die Probe darf dabei noch
 	 * keinen Messwert haben (=null).
 	 * 
 	 * @param probeId  Eindeutige id der Probe
