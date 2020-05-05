@@ -49,13 +49,13 @@ public interface ProbenVerwalten {
 	 */
 	void addProbe(Probe probe);
 
-//	/**
-//	 * Fuegt eine Probe dem Speicher hinzu. Die Probe ist dabei ohne messwert
-//	 * (=null).
-//	 * 
-//	 * @param zeitpunkt Zeitpunkt der Probennahme
-//	 */
-//	void addProbe(LocalDateTime zeitpunkt);
+	/**
+	 * Fuegt eine Probe dem Speicher hinzu. Die Probe ist dabei ohne messwert
+	 * (=null).
+	 * 
+	 * @param zeitpunkt Zeitpunkt der Probennahme
+	 */
+	void addProbe(LocalDateTime zeitpunkt);
 
 	/**
 	 * Fuegt eine Probe dem Speicher hinzu.

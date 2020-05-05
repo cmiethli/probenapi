@@ -56,8 +56,8 @@ public class ProbenVerwaltenDb implements ProbenVerwalten {
 				.getConnection()) {
 
 			String sqlInsert;
-//mit Messwert
 			if (p.getMw() != null) {
+//mit Messwert
 				sqlInsert = "INSERT INTO probe(id, zeitpunkt, messwert, ergebnis)"
 						+ " VALUES(?, ?, ?, ?)";
 //											(1, 2, 3, 4)  >> JDBC beginnt NICHT bei 0!
@@ -71,8 +71,8 @@ public class ProbenVerwaltenDb implements ProbenVerwalten {
 				} catch (SQLException e) {
 					throw new RuntimeException(e);
 				}
-//ohne Messwert
 			} else {
+//ohne Messwert
 				sqlInsert = "INSERT INTO probe(id, zeitpunkt)" + " VALUES(?, ?)";
 				try (PreparedStatement pstmt = conn.prepareStatement(sqlInsert)) {
 					pstmt.setLong(1, p.getId());
@@ -90,8 +90,13 @@ public class ProbenVerwaltenDb implements ProbenVerwalten {
 	}
 
 	@Override
-	public void addProbe(LocalDateTime zeit, int messwert) {
-		addProbe(new Probe(zeit, messwert));
+	public void addProbe(LocalDateTime zeitpunkt, int messwert) {
+		addProbe(new Probe(zeitpunkt, messwert));
+	}
+
+	@Override
+	public void addProbe(LocalDateTime zeit) {
+		addProbe(new Probe(zeit));
 	}
 
 	@Override
@@ -144,23 +149,6 @@ public class ProbenVerwaltenDb implements ProbenVerwalten {
 	}
 //	######################################################
 //	################## Helper Meths ######################
-
-//	private Optional<Probe> getProbe(long probeId) {
-//		String sqlSelect = "UPDATE `probe` SET `messwert` = ?"
-//				+ " WHERE `probe`.`id` =?";
-//		int updatedRows = 0;
-//		try (Connection conn = MyDataSourceFactory.getMySQLDataSource()
-//				.getConnection();
-//				PreparedStatement pstmt = conn.prepareStatement(sqlDelete)) {
-//
-//			pstmt.setInt(1, messwert);
-//			pstmt.setLong(2, probeId);
-//			updatedRows = pstmt.executeUpdate();
-//		} catch (SQLException e) {
-//			throw new RuntimeException(e);
-//		}
-//		return updatedRows != 0 ? true : false;
-//	}
 
 	private List<Probe> selectQuery(String sqlSelect) {
 		List<Probe> proben = new ArrayList<Probe>();
