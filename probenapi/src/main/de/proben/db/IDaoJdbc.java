@@ -37,13 +37,6 @@ public class IDaoJdbc implements IDao {
 	}
 
 	@Override
-	public List<Probe> filtered(Ergebnis ergebnis) {
-		String sqlSelect = "SELECT * FROM probe WHERE probe.ergebnis='" + ergebnis
-				+ "'";
-		return selectQuery(sqlSelect);
-	}
-
-	@Override
 	public void addProbe(Probe p) {
 		try (Connection conn = datasource.getConnection()) {
 

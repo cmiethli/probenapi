@@ -1,10 +1,16 @@
 package de.proben.api;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.proben.db.DbFactory;
 import de.proben.db.IDao;
+import de.proben.db.PersistenceException;
 import de.proben.model.Probe;
 import de.proben.model.Probe.Ergebnis;
 
@@ -37,7 +43,9 @@ public class ProbenVerwaltenDb implements ProbenVerwalten {
 
 	@Override
 	public List<Probe> filtered(Ergebnis ergebnis) {
-		return dao.filtered(ergebnis);
+		String sqlSelect = "SELECT * FROM probe WHERE probe.ergebnis='" + ergebnis
+				+ "'";
+		return selectQuery(sqlSelect);
 	}
 
 	@Override
@@ -63,5 +71,32 @@ public class ProbenVerwaltenDb implements ProbenVerwalten {
 	@Override
 	public boolean addMesswert(long probeId, Integer messwert) {
 		return dao.addMesswert(probeId, messwert);
+	}
+
+//	################### Helper Meths #################
+	private List<Probe> selectQuery(String sqlSelect) {
+		List<Probe> proben = new ArrayList<Probe>();
+		try (Connection conn = DbFactory.getMySQLDataSource()
+				.getConnection();
+				Statement statement = conn.createStatement();
+				ResultSet rs = statement.executeQuery(sqlSelect);) {
+			while (rs.next()) {
+				Ergebnis erg;
+				Integer mw;
+				if (rs.getString(4) == null) {
+					erg = null;
+					mw = null;
+				} else {
+					erg = Ergebnis.valueOf(rs.getString(4));
+					mw = rs.getInt(3);
+				}
+
+				proben.add(new Probe(rs.getLong(1), rs.getTimestamp(2)
+						.toLocalDateTime(), mw, erg));
+			}
+		} catch (SQLException e) {
+			throw new PersistenceException(e);
+		}
+		return proben;
 	}
 }
