@@ -2,7 +2,7 @@ package de.proben.model;
 
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
 import de.proben.util.Constants;
@@ -45,7 +45,6 @@ public class Probe {
 
 	@Override
 	public String toString() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-dd");
 //		Java12 Feature
 		String formatKilosStr;
 		if (messwert == null) {
@@ -56,13 +55,9 @@ public class Probe {
 			formatKilos.setMaximumFractionDigits(1);
 			formatKilosStr = formatKilos.format(messwert);
 		}
-
-		return String.format("[id=%3d, zeit=%8s, messwert=%5s, ergebnis=%s",
-				probeId, zeitpunkt.format(formatter), formatKilosStr, ergebnis + "]");
-//		return "[id=" + probeId + ", zeit="
-//				+ zeitpunkt.truncatedTo(ChronoUnit.MINUTES)
-//						.toLocalDate()
-//				+ ", mw=" + messwert + ", erg=" + ergebnis + "]";
+		return String.format("[id=%3d,  zeit=%17s,  messwert=%5s,  ergebnis=%9s",
+				probeId, zeitpunkt.truncatedTo(ChronoUnit.MINUTES), formatKilosStr,
+				ergebnis + "]");
 	}
 
 	@Override
